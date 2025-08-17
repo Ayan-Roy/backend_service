@@ -1,12 +1,11 @@
 package com.garland.backend_service;
 
 import com.garland.backend_service.service.GoogleSheetService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class SheetController {
@@ -17,8 +16,10 @@ public class SheetController {
         this.googleSheetService = googleSheetService;
     }
 
-    @GetMapping("/read")
-    public List<List<Object>> read(@RequestParam String tabName) throws IOException {
+    @PostMapping("/read")
+    public List<List<Object>> read(@RequestBody Map<String, String> request) throws IOException {
+        String tabName = request.get("tabName");
         return googleSheetService.readSheet(tabName);
     }
+
 }
