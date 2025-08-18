@@ -1,25 +1,37 @@
 package com.garland.backend_service;
 
-import com.garland.backend_service.service.GoogleSheetService;
+import com.garland.backend_service.service.ProductListService;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 public class SheetController {
 
-    private final GoogleSheetService googleSheetService;
+    private final ProductListService productListService;
 
-    public SheetController(GoogleSheetService googleSheetService) {
-        this.googleSheetService = googleSheetService;
+    public SheetController(ProductListService productListService) {
+        this.productListService = productListService;
     }
 
-    @PostMapping("/read")
-    public List<List<Object>> read(@RequestBody Map<String, String> request) throws IOException {
-        String tabName = request.get("tabName");
-        return googleSheetService.readSheet(tabName);
+
+
+
+
+    @PostMapping("/productList")
+    public Object productList(@RequestBody Map<String, String> request) throws IOException {
+        String sheetName = request.get("sheetName");
+        String query = request.get("query");
+
+        if (sheetName == null || sheetName.isEmpty()) {
+            throw new IllegalArgumentException("sheetName cannot be null or empty");
+        }
+
+        if(query.equalsIgnoreCase("getProductList")){
+            return productListService.getProductList(sheetName);
+        }
+        return productListService.readSheet(sheetName);
     }
 
 }
