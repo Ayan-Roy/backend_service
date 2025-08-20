@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class SheetController {
+public class ProductListController {
 
     private final ProductListService productListService;
 
-    public SheetController(ProductListService productListService) {
+    public ProductListController(ProductListService productListService) {
         this.productListService = productListService;
     }
 
@@ -22,7 +22,7 @@ public class SheetController {
      * For Product List Sheet
      */
     @PostMapping("/productList")
-    public ResponseEntity<Map<String, Object>> productList(@RequestBody Map<String, String> request) throws IOException {
+    public ResponseEntity<Map<String, Object>> productList(@RequestBody Map<String, String> request) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -39,15 +39,18 @@ public class SheetController {
                 Object result;
                 if ("getProductList".equalsIgnoreCase(query)) {
                     result = productListService.getProductList(sheetName);
+                    response.put("isSuccess", true);
+                    response.put("data", result);
                 } else {
-                    result = productListService.readSheet(sheetName);
+                    response.put("isSuccess", false);
+                    response.put("message", "Invalid query!");
                 }
-                response.put("isSuccess", true);
-                response.put("data", result);
             }
             return ResponseEntity.ok(response);
 
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
+            response.put("isSuccess", false);
+            response.put("message", e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
     }

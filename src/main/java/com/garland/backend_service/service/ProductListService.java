@@ -34,8 +34,10 @@ public class ProductListService {
         return values;
     }
 
+
     // Map sheet to ProductList objects
     public List<ProductList> getProductList(String sheetName) throws IOException {
+        System.out.println("Getting ProductList for sheet " + sheetName);
         String range = sheetName + "!A1:O"; // Only 15 columns
         List<List<Object>> values = sheetsService.spreadsheets().values()
                 .get(spreadsheetId, range)
