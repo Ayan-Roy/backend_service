@@ -41,7 +41,13 @@ public class ProductListController {
                     result = productListService.getProductList(sheetName);
                     response.put("isSuccess", true);
                     response.put("data", result);
-                } else {
+                }else if("updateTotalQuantity".equalsIgnoreCase(query)){
+                    String totalQuantity = request.get("totalQuantity");
+                    String strBarcode = request.get("barcode");
+                    result = productListService.updateTotalQuantity(sheetName, strBarcode, totalQuantity);
+                    response.put("isSuccess", true);
+                    response.put("data", result);
+                }else {
                     response.put("isSuccess", false);
                     response.put("message", "Invalid query!");
                 }

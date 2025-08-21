@@ -20,7 +20,8 @@ public class GoogleSheetsConfig {
     public Sheets sheetsService() throws Exception {
         InputStream in = GoogleSheetsConfig.class.getResourceAsStream("/credentials.json");
         GoogleCredentials credentials = GoogleCredentials.fromStream(in)
-                .createScoped(List.of(SheetsScopes.SPREADSHEETS_READONLY));
+                .createScoped(List.of(SheetsScopes.SPREADSHEETS));
+
 
         return new Sheets.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
