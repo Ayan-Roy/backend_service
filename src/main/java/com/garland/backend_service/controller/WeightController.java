@@ -27,11 +27,6 @@ public class WeightController {
         try {
             String sheetName = request.get("sheetName");
             String query = request.get("query");
-            String rowLabel = request.get("rowLabel");
-
-            System.out.println("SheetName ->"+sheetName);
-            System.out.println("Query ->"+query);
-
 
             if (sheetName == null || sheetName.isEmpty()) {
                 response.put("isSuccess", false);
@@ -46,6 +41,7 @@ public class WeightController {
                     response.put("isSuccess", true);
                     response.put("data", result);
                 }else if("getWeightByRowLabel".equalsIgnoreCase(query)){
+                    String rowLabel = request.get("rowLabel");
                     result = weightService.getWeightByRowLabel(sheetName, rowLabel);
                     response.put("isSuccess", true);
                     response.put("data", result);
