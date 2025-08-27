@@ -34,13 +34,21 @@ public class ProductionRegisterService {
 
     public void addNewProductionRegister(String sheetName, ProductionRegister productionRegister) throws IOException {
         // Get last row
-        int lastRow = sheetsService.spreadsheets().values()
+        List<List<Object>> values = sheetsService.spreadsheets().values()
                 .get(spreadsheetId, sheetName + "!A:A")
                 .execute()
-                .getValues()
-                .size();
+                .getValues();
 
-        int newId = lastRow; // Auto-increment ID
+        int newId = 1; // Default for empty sheet
+        if (values != null && !values.isEmpty()) {
+            String lastValue = values.get(values.size() - 1).get(0).toString();
+            try {
+                newId = Integer.parseInt(lastValue) + 1;
+            } catch (NumberFormatException e) {
+                newId = values.size() + 1; // fallback
+            }
+        }
+        productionRegister.setId(newId);
 
         ValueRange appendBody = new ValueRange()
                 .setValues(Arrays.asList(

@@ -24,12 +24,12 @@ public class ProductionRegisterController {
      * For Production Register Sheet
      */
     @PostMapping("/productionRegister")
-    public ResponseEntity<Map<String, Object>> productionRegister(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Map<String, Object>> productionRegister(@RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
         System.out.println(request.get("Hello From ProductionRegisterController"));
         try {
-            String sheetName = request.get("sheetName");
-            String query = request.get("query");
+            String sheetName = (String) request.get("sheetName");
+            String query = (String) request.get("query");
 
             System.out.println("SheetName ->"+sheetName);
             System.out.println("Query ->"+query);
@@ -48,6 +48,7 @@ public class ProductionRegisterController {
                     ProductionRegister productionRegister  = mapper.convertValue(request.get("data"), ProductionRegister.class);
                     productionRegisterService.addNewProductionRegister(sheetName, productionRegister);
                     response.put("isSuccess", true);
+                    response.put("data", productionRegister);
                 }else {
                     response.put("isSuccess", false);
                     response.put("message", "Invalid query! ");
