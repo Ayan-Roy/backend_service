@@ -43,8 +43,11 @@ public class ProductionRegisterController {
                 response.put("message", "Query is required");
             } else {
                 Object result;
+
+
                 if ("addNewProductionRegister".equalsIgnoreCase(query)) {
                     ObjectMapper mapper = new ObjectMapper();
+
                     ProductionRegister productionRegister  = mapper.convertValue(request.get("data"), ProductionRegister.class);
                     productionRegisterService.addNewProductionRegister(sheetName, productionRegister);
                     response.put("isSuccess", true);
@@ -53,6 +56,8 @@ public class ProductionRegisterController {
                     response.put("isSuccess", false);
                     response.put("message", "Invalid query! ");
                 }
+
+
             }
             return ResponseEntity.ok(response);
 

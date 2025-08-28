@@ -35,9 +35,14 @@ public class WeightController {
                 response.put("isSuccess", false);
                 response.put("message", "Query is required");
             } else {
+
                 Object result;
+
+
+
                 if ("getWeight".equalsIgnoreCase(query)) {
                     result = weightService.getWeight(sheetName);
+
                     response.put("isSuccess", true);
                     response.put("data", result);
                 }else if("getWeightByRowLabel".equalsIgnoreCase(query)){
@@ -49,6 +54,8 @@ public class WeightController {
                     response.put("isSuccess", false);
                     response.put("message", "Invalid query! ");
                 }
+
+
             }
             return ResponseEntity.ok(response);
 
