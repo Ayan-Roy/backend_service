@@ -1,5 +1,6 @@
 package com.garland.backend_service.controller;
 
+import com.garland.backend_service.model.ResponseBody;
 import com.garland.backend_service.service.ProductListService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,47 +23,46 @@ public class ProductListController {
      * For Product List Sheet
      */
     @PostMapping("/productList")
-    public ResponseEntity<Map<String, Object>> productList(@RequestBody Map<String, String> request) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ResponseBody> productList(@RequestBody Map<String, Object> request) {
+        ResponseBody responseBody = new ResponseBody();
 
         try {
-            String sheetName = request.get("sheetName");
-            String query = request.get("query");
+            String sheetName = (String) request.get("sheetName");
+            String query = (String) request.get("query");
 
             if (sheetName == null || sheetName.isEmpty()) {
-                response.put("isSuccess", false);
-                response.put("message", "Sheet name is required");
+                responseBody.setSuccess(false);
+                responseBody.setMessage("Sheet name is required");
             } else if (query == null || query.isEmpty()) {
-                response.put("isSuccess", false);
-                response.put("message", "Query is required");
+                responseBody.setSuccess(false);
+                responseBody.setMessage("Query is required");
             } else {
-                Object result;
-
-
+                Object data;
 
                 if ("getProductList".equalsIgnoreCase(query)) {
-                    result = productListService.getProductList(sheetName);
-                    response.put("isSuccess", true);
-                    response.put("data", result);
-                }else if("updateTotalQuantity".equalsIgnoreCase(query)){
-                    String totalQuantity = request.get("totalQuantity");
-                    String strBarcode = request.get("barcode");
-                    result = productListService.updateTotalQuantity(sheetName, strBarcode, totalQuantity);
-                    response.put("isSuccess", true);
-                    response.put("data", result);
-                }else {
-                    response.put("isSuccess", false);
-                    response.put("message", "Invalid query!");
+                    data = productListService.getProductList(sheetName);
+                    responseBody.setSuccess(true);
+                    responseBody.setData(data);
+                } else if ("updateTotalQuantity".equalsIgnoreCase(query)) {
+                    String totalQuantity = (String) request.get("totalQuantity");
+                    String strBarcode = (String) request.get("barcode");
+                    data = productListService.updateTotalQuantity(sheetName, strBarcode, totalQuantity);
+                    responseBody.setSuccess(true);
+                    responseBody.setData(data);
+                } else {
+                    responseBody.setSuccess(false);
+                    responseBody.setMessage("Invalid query!");
                 }
 
 
             }
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(responseBody);
 
         } catch (Exception e) {
-            response.put("isSuccess", false);
-            response.put("message", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            e.printStackTrace();
+            responseBody.setSuccess(false);
+            responseBody.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseBody);
         }
     }
 

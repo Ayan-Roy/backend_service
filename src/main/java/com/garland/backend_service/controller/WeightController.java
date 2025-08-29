@@ -1,5 +1,6 @@
 package com.garland.backend_service.controller;
 
+import com.garland.backend_service.model.ResponseBody;
 import com.garland.backend_service.service.ProductListService;
 import com.garland.backend_service.service.WeightService;
 import org.springframework.http.ResponseEntity;
@@ -21,48 +22,46 @@ public class WeightController {
      * For Weight Sheet
      */
     @PostMapping("/weight")
-    public ResponseEntity<Map<String, Object>> weight(@RequestBody Map<String, String> request) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ResponseBody> weight(@RequestBody Map<String, Object> request) {
+        ResponseBody responseBody = new ResponseBody();
         System.out.println(request.get("Hello From WeightController"));
         try {
-            String sheetName = request.get("sheetName");
-            String query = request.get("query");
+            String sheetName = (String) request.get("sheetName");
+            String query = (String) request.get("query");
 
             if (sheetName == null || sheetName.isEmpty()) {
-                response.put("isSuccess", false);
-                response.put("message", "Sheet name is required");
+                responseBody.setSuccess(false);
+                responseBody.setMessage("Sheet name is required");
             } else if (query == null || query.isEmpty()) {
-                response.put("isSuccess", false);
-                response.put("message", "Query is required");
+                responseBody.setSuccess(false);
+                responseBody.setMessage("Query is required");
             } else {
-
-                Object result;
-
-
+                Object data;
 
                 if ("getWeight".equalsIgnoreCase(query)) {
-                    result = weightService.getWeight(sheetName);
+                    data = weightService.getWeight(sheetName);
+                    responseBody.setSuccess(true);
+                    responseBody.setData(data);
+                } else if ("getWeightByRowLabel".equalsIgnoreCase(query)) {
+                    String rowLabel = (String) request.get("rowLabel");
 
-                    response.put("isSuccess", true);
-                    response.put("data", result);
-                }else if("getWeightByRowLabel".equalsIgnoreCase(query)){
-                    String rowLabel = request.get("rowLabel");
-                    result = weightService.getWeightByRowLabel(sheetName, rowLabel);
-                    response.put("isSuccess", true);
-                    response.put("data", result);
-                }else {
-                    response.put("isSuccess", false);
-                    response.put("message", "Invalid query! ");
+                    data = weightService.getWeightByRowLabel(sheetName, rowLabel);
+                    responseBody.setSuccess(true);
+                    responseBody.setData(data);
+                } else {
+                    responseBody.setSuccess(false);
+                    responseBody.setMessage("Invalid query!");
                 }
 
 
             }
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(responseBody);
 
         } catch (Exception e) {
-            response.put("isSuccess", false);
-            response.put("message", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            e.printStackTrace();
+            responseBody.setSuccess(false);
+            responseBody.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseBody);
         }
     }
 
