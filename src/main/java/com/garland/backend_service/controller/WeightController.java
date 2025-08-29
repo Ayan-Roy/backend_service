@@ -1,5 +1,6 @@
 package com.garland.backend_service.controller;
 
+import com.garland.backend_service.model.RequestBean;
 import com.garland.backend_service.model.ResponseBody;
 import com.garland.backend_service.service.ProductListService;
 import com.garland.backend_service.service.WeightService;
@@ -22,12 +23,12 @@ public class WeightController {
      * For Weight Sheet
      */
     @PostMapping("/weight")
-    public ResponseEntity<ResponseBody> weight(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<ResponseBody> weight(@RequestBody RequestBean requestBean) {
         ResponseBody responseBody = new ResponseBody();
-        System.out.println(request.get("Hello From WeightController"));
+        System.out.println("Hello From WeightController");
         try {
-            String sheetName = (String) request.get("sheetName");
-            String query = (String) request.get("query");
+            String sheetName = requestBean.getSheetName();
+            String query = requestBean.getQuery();
 
             if (sheetName == null || sheetName.isEmpty()) {
                 responseBody.setSuccess(false);
@@ -36,18 +37,20 @@ public class WeightController {
                 responseBody.setSuccess(false);
                 responseBody.setMessage("Query is required");
             } else {
-                Object data;
+                Object result;
 
                 if ("getWeight".equalsIgnoreCase(query)) {
-                    data = weightService.getWeight(sheetName);
+                    result = weightService.getWeight(sheetName);
                     responseBody.setSuccess(true);
-                    responseBody.setData(data);
+                    responseBody.setData(result);
                 } else if ("getWeightByRowLabel".equalsIgnoreCase(query)) {
-                    String rowLabel = (String) request.get("rowLabel");
 
-                    data = weightService.getWeightByRowLabel(sheetName, rowLabel);
+                    Map<String, Object> data = requestBean.getData();
+                    String rowLabel = (String) data.get("rowLabel");
+
+                    result = weightService.getWeightByRowLabel(sheetName, rowLabel);
                     responseBody.setSuccess(true);
-                    responseBody.setData(data);
+                    responseBody.setData(result);
                 } else {
                     responseBody.setSuccess(false);
                     responseBody.setMessage("Invalid query!");

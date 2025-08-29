@@ -2,6 +2,7 @@ package com.garland.backend_service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garland.backend_service.model.ProductionRegister;
+import com.garland.backend_service.model.RequestBean;
 import com.garland.backend_service.model.ResponseBody;
 import com.garland.backend_service.service.ProductionRegisterService;
 import com.garland.backend_service.service.WeightService;
@@ -25,12 +26,12 @@ public class ProductionRegisterController {
      * For Production Register Sheet
      */
     @PostMapping("/productionRegister")
-    public ResponseEntity<ResponseBody> productionRegister(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<ResponseBody> productionRegister(@RequestBody RequestBean requestBean) {
         ResponseBody responseBody = new ResponseBody();
-        System.out.println(request.get("Hello From ProductionRegisterController"));
+        System.out.println("Hello From ProductionRegisterController");
         try {
-            String sheetName = (String) request.get("sheetName");
-            String query = (String) request.get("query");
+            String sheetName = requestBean.getSheetName();
+            String query = requestBean.getQuery();
 
             System.out.println("SheetName ->" + sheetName);
             System.out.println("Query ->" + query);
@@ -46,8 +47,8 @@ public class ProductionRegisterController {
 
                 if ("addNewProductionRegister".equalsIgnoreCase(query)) {
                     ObjectMapper mapper = new ObjectMapper();
-
-                    ProductionRegister productionRegister = mapper.convertValue(request.get("data"), ProductionRegister.class);
+                    Object data = requestBean.getData();
+                    ProductionRegister productionRegister = mapper.convertValue(data, ProductionRegister.class);
                     productionRegisterService.addNewProductionRegister(sheetName, productionRegister);
                     responseBody.setSuccess(true);
                     responseBody.setData(productionRegister);
