@@ -14,12 +14,12 @@ public class ResponseBody {
     public ResponseBody() {
     }
 
-    public boolean isSuccess() {
+    public Boolean getSuccess() {
         return isSuccess;
     }
 
-    public void setSuccess(Boolean success) {
-        isSuccess = success;
+    public void setSuccess(Boolean isSuccess) {
+        this.isSuccess = isSuccess;
     }
 
     public Object getData() {
