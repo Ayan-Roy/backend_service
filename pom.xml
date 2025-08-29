@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>backend_service</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Garland Backend Spring Boot Project</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -85,6 +85,7 @@
 
 
 	<build>
+		<finalName>backend_service</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
