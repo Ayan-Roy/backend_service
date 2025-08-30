@@ -47,10 +47,11 @@ public class ProductListController {
                     responseBody.setData(result);
                 } else if ("updateTotalQuantity".equalsIgnoreCase(query)) {
                     Map<String, Object> data = requestBean.getData();
+                    String barcode = (String) data.get("barcode");
+                    String itemCode = (String) data.get("itemCode");
                     String totalQuantity = (String) data.get("totalQuantity");
-                    String strBarcode = (String) data.get("barcode");
 
-                    result = productListService.updateTotalQuantity(sheetName, strBarcode, totalQuantity);
+                    result = productListService.updateTotalQuantity(sheetName, barcode, itemCode, totalQuantity);
                     responseBody.setSuccess(true);
                     responseBody.setData(result);
                 } else {

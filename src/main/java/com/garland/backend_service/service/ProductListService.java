@@ -64,7 +64,7 @@ public class ProductListService {
     }
 
 
-    public ProductList updateTotalQuantity(String sheetName, String strBarcode, String totalQuantity) throws IOException {
+    public ProductList updateTotalQuantity(String sheetName, String strBarcode, String itemCode, String totalQuantity) throws IOException {
         // Step 1: Get all data from the sheet
         String range = sheetName + "!A:L"; // Read up to Column L
         ValueRange response = sheetsService.spreadsheets().values()
@@ -79,7 +79,8 @@ public class ProductListService {
         int rowIndex = -1;
         for (int i = 0; i < values.size(); i++) {
             List<Object> row = values.get(i);
-            if (row.size() > 10 && row.get(10).toString().endsWith(strBarcode)) {
+            if (row.size() > 10 && row.get(10).toString().endsWith(strBarcode) &&
+                    row.get(2).toString().equals(itemCode)) {
                 rowIndex = i;
                 break;
             }
@@ -108,16 +109,6 @@ public class ProductListService {
 
         return mapRowToProductBean(updatedRow); // Return mapped Bean
     }
-
-
-
-
-
-
-
-
-
-
 
 
     private ProductList mapRowToProductBean(List<Object> row) {
