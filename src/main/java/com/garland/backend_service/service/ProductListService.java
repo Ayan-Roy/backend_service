@@ -25,10 +25,6 @@ public class ProductListService {
     }
 
 
-
-
-
-
     public List<ProductList> getProductList(String sheetName) throws IOException {
         System.out.println("Getting ProductList for sheet " + sheetName);
         String range = sheetName + "!A1:O"; // Only 15 columns
@@ -55,11 +51,6 @@ public class ProductListService {
     }
 
 
-
-
-
-
-
     public List<ProductList> getProductByBarcode(String sheetName, String strBarcode) throws IOException {
         System.out.println("Getting ProductList for sheet " + sheetName);
         String range = sheetName + "!A1:O"; // Only 15 columns
@@ -78,16 +69,12 @@ public class ProductListService {
         List<ProductList> productList = new ArrayList<>();
 
         for (List<Object> row : values) {
-            if(row.size() > 10) {
+            if (row.size() > 10) {
                 String barcode = row.get(10).toString();
-                if(strBarcode.length()>barcode.length()) {
-                    String trimBarcode = strBarcode.substring(strBarcode.length() - barcode.length());
-                    if(trimBarcode.equals(barcode)){
-                        productList.add(mapRowToProductBean(row));
-                        return productList;
-                    }
+                if (barcode != null && !barcode.isEmpty() && strBarcode.trim().endsWith(barcode.trim())){
+                    productList.add(mapRowToProductBean(row));
+                    return productList;
                 }
-
             }
         }
         return productList;
