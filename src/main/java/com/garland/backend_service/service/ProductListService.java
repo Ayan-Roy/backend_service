@@ -24,20 +24,11 @@ public class ProductListService {
         this.sheetsService = sheetsService;
     }
 
-    // Raw sheet data (optional)
-    public List<List<Object>> readSheet(String sheetName) throws IOException {
-        String range = sheetName + "!A:O"; // Only 15 columns (A–O)
-        List<List<Object>> values = sheetsService.spreadsheets().values()
-                .get(spreadsheetId, range)
-                .execute()
-                .getValues();
-
-        if (values == null) return Collections.emptyList();
-        return values;
-    }
 
 
-    // Map sheet to ProductList objects
+
+
+
     public List<ProductList> getProductList(String sheetName) throws IOException {
         System.out.println("Getting ProductList for sheet " + sheetName);
         String range = sheetName + "!A1:O"; // Only 15 columns
@@ -60,6 +51,45 @@ public class ProductListService {
         }
 
         System.out.println("List Size -> " + productList.size());
+        return productList;
+    }
+
+
+
+
+
+
+
+    public List<ProductList> getProductByBarcode(String sheetName, String strBarcode) throws IOException {
+        System.out.println("Getting ProductList for sheet " + sheetName);
+        String range = sheetName + "!A1:O"; // Only 15 columns
+        List<List<Object>> values = sheetsService.spreadsheets().values()
+                .get(spreadsheetId, range)
+                .execute()
+                .getValues();
+
+        if (values == null || values.size() <= 1) {
+            return Collections.emptyList();
+        }
+
+        // skip header row
+        values.remove(0);
+
+        List<ProductList> productList = new ArrayList<>();
+
+        for (List<Object> row : values) {
+            if(row.size() > 10) {
+                String barcode = row.get(10).toString();
+                if(strBarcode.length()>barcode.length()) {
+                    String trimBarcode = strBarcode.substring(strBarcode.length() - barcode.length());
+                    if(trimBarcode.equals(barcode)){
+                        productList.add(mapRowToProductBean(row));
+                        return productList;
+                    }
+                }
+
+            }
+        }
         return productList;
     }
 
