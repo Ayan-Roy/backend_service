@@ -1,37 +1,35 @@
 package com.garland.backend_service.service;
 
 import com.garland.backend_service.model.ProductionRegister;
-import com.garland.backend_service.model.Weight;
+import com.garland.backend_service.model.RawMaterialRegister;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
-public class ProductionRegisterService {
+public class RawMaterialRegisterService {
 
     private final Sheets sheetsService;
     @Value("${google.sheets.spreadsheet-id}")
     private String spreadsheetId;
 
     /*      sheetName -> Production Register     */
-    public ProductionRegisterService(Sheets sheetsService) {
+    public RawMaterialRegisterService(Sheets sheetsService) {
         this.sheetsService = sheetsService;
     }
 
 
     /**
-     * Get All data from Production Register Sheet
+     * Get All data from Raw Material Register Sheet
      */
 
 
-    public void addNewProductionRegister(String sheetName, ProductionRegister productionRegister) throws IOException {
+    public void addNewRawMaterialRegister(String sheetName, RawMaterialRegister rawMaterialRegister) throws IOException {
         // Get last row
         List<List<Object>> values = sheetsService.spreadsheets().values()
                 .get(spreadsheetId, sheetName + "!A:A")
@@ -47,35 +45,31 @@ public class ProductionRegisterService {
                 newId = values.size() + 1; // fallback
             }
         }
-        productionRegister.setId(newId);
+        rawMaterialRegister.setId(newId);
 
         ValueRange appendBody = new ValueRange()
                 .setValues(Arrays.asList(
                         Arrays.asList(
-                                safeValue(newId),
-                                safeValue(productionRegister.getStrBarcode()),
-                                safeValue(productionRegister.getInsertDate()),
-                                safeValue(productionRegister.getQuantity()),
-                                safeValue(productionRegister.getLineName()),
-                                safeValue(productionRegister.getInsertBy()),
-                                safeValue(productionRegister.getProductName()),
-                                safeValue(productionRegister.getItemCode()),
-                                safeValue(productionRegister.getTotalWeight()),
-                                safeValue(productionRegister.getBarcode()),
-                                safeValue(productionRegister.getWarehouse())
+                                newId,
+                                safeValue(rawMaterialRegister.getStrBarcode()),
+                                safeValue(rawMaterialRegister.getInsertDate()),
+                                safeValue(rawMaterialRegister.getQuantity()),
+                                safeValue(rawMaterialRegister.getWeight()),
+                                safeValue(rawMaterialRegister.getLineName()),
+                                safeValue(rawMaterialRegister.getInsertBy()),
+                                safeValue(rawMaterialRegister.getItemCode()),
+                                safeValue(rawMaterialRegister.getWarehouse())
                         )
                 ));
 
         sheetsService.spreadsheets().values()
-                .append(spreadsheetId, sheetName + "!A:K", appendBody)
+                .append(spreadsheetId, sheetName + "!A:I", appendBody)
                 .setValueInputOption("RAW")
                 .execute();
-
     }
 
     private static String safeValue(Object value) {
         return value == null ? "" : String.valueOf(value);
     }
-
 
 }

@@ -1,20 +1,18 @@
 package com.garland.backend_service.model;
 
-public class ProductionRegister {
+public class RawMaterialRegister {
 
     private int id;
     private String strBarcode;
     private String insertDate;
     private String quantity;
+    private String weight;
     private String lineName;
     private String insertBy;
-    private String productName;
     private String itemCode;
-    private String totalWeight;
-    private String barcode;
     private String warehouse;
 
-    public ProductionRegister() {
+    public RawMaterialRegister() {
     }
 
     public int getId() {
@@ -49,6 +47,14 @@ public class ProductionRegister {
         this.quantity = quantity;
     }
 
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
     public String getLineName() {
         return lineName;
     }
@@ -65,36 +71,12 @@ public class ProductionRegister {
         this.insertBy = insertBy;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
     public String getItemCode() {
         return itemCode;
     }
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
-    }
-
-    public String getTotalWeight() {
-        return totalWeight;
-    }
-
-    public void setTotalWeight(String totalWeight) {
-        this.totalWeight = totalWeight;
-    }
-
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
     }
 
     public String getWarehouse() {
