@@ -45,12 +45,32 @@ public class ProductListController {
                     result = productListService.getProductList(sheetName);
                     responseBody.setSuccess(true);
                     responseBody.setData(result);
-                }if ("getProductByBarcode".equalsIgnoreCase(query)) {
+                } else if ("getProductByBarcode".equalsIgnoreCase(query)) {
                     Map<String, Object> data = requestBean.getData();
                     String strBarcode = (String) data.get("strBarcode");
                     result = productListService.getProductByBarcode(sheetName, strBarcode);
                     responseBody.setSuccess(true);
                     responseBody.setData(result);
+                } else if ("getProductByDate".equalsIgnoreCase(query)) {
+                    Map<String, Object> data = requestBean.getData();
+                    if (data != null) {
+                        String date = (String) data.get("date");
+                        String warehouse = (String) data.get("warehouse");
+                        if (date == null) {
+                            responseBody.setSuccess(false);
+                            responseBody.setMessage("Date is required");
+                        } else if (warehouse == null) {
+                            responseBody.setSuccess(false);
+                            responseBody.setMessage("Warehouse is required");
+                        } else {
+                            result = productListService.getProductByDate(sheetName, date, warehouse);
+                            responseBody.setSuccess(true);
+                            responseBody.setData(result);
+                        }
+                    } else {
+                        responseBody.setSuccess(false);
+                        responseBody.setMessage("Invalid Data!");
+                    }
                 } else if ("updateTotalQuantity".equalsIgnoreCase(query)) {
                     Map<String, Object> data = requestBean.getData();
                     String barcode = (String) data.get("barcode");

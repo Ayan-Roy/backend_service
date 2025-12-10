@@ -81,6 +81,38 @@ public class ProductListService {
     }
 
 
+
+    public List<ProductList> getProductByDate(String sheetName, String date, String warehouse) throws IOException {
+        System.out.println("Getting ProductList for sheet " + sheetName);
+        String range = sheetName + "!A1:O"; // Only 15 columns
+        List<List<Object>> values = sheetsService.spreadsheets().values()
+                .get(spreadsheetId, range)
+                .execute()
+                .getValues();
+
+        if (values == null || values.size() <= 1) {
+            return Collections.emptyList();
+        }
+
+        // skip header row
+        values.remove(0);
+
+        List<ProductList> productList = new ArrayList<>();
+
+        for (List<Object> row : values) {
+            if (row.size() > 10) {
+                String strDate = row.get(5).toString();
+                String strWarehouse = row.get(4).toString();
+                if (strDate != null && !strDate.isEmpty() && strDate.trim().toUpperCase().equalsIgnoreCase(date.trim().toUpperCase())
+                && strWarehouse != null && !strWarehouse.isEmpty() && strWarehouse.trim().toUpperCase().equalsIgnoreCase(warehouse.trim().toUpperCase())) {
+                    productList.add(mapRowToProductBean(row));
+                }
+            }
+        }
+        return productList;
+    }
+
+
     public ProductList updateTotalQuantity(String sheetName, String strBarcode, String itemCode, String totalQuantity) throws IOException {
         // Step 1: Get all data from the sheet
         String range = sheetName + "!A:L"; // Read up to Column L
