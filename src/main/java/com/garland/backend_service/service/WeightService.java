@@ -1,6 +1,7 @@
 package com.garland.backend_service.service;
 
 import com.garland.backend_service.model.Weight;
+import com.garland.backend_service.model.WeightWithUPC;
 import com.google.api.services.sheets.v4.Sheets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -57,9 +58,9 @@ public class WeightService {
             weight.setPlant(row.size() > 7 ? row.get(7).toString() : "");
             weight.setLine(row.size() > 8 ? row.get(8).toString() : "");
             weight.setWeight(row.size() > 9 ? row.get(9).toString() : "0");
-            weight.setTi(row.size() > 10 ? row.get(10).toString() : "0");
+/*            weight.setTi(row.size() > 10 ? row.get(10).toString() : "0");
             weight.setHi(row.size() > 11 ? row.get(11).toString() : "0");
-            weight.setUpc(row.size() > 12 ? row.get(12).toString() : "0");
+            weight.setUpc(row.size() > 12 ? row.get(12).toString() : "0");*/
 
             weightList.add(weight);
         }
@@ -93,6 +94,54 @@ public class WeightService {
         for (List<Object> row : values) {
             if (row.size() > 0 && row.get(0).toString().equalsIgnoreCase(rowLabel)) {
                 Weight weight = new Weight();
+                weight.setRowLabel(row.get(0).toString());
+                weight.setItemDescription(row.size() > 1 ? row.get(1).toString() : "");
+                weight.setGsg(row.size() > 2 ? row.get(2).toString() : "");
+                weight.setGroup(row.size() > 3 ? row.get(3).toString() : "");
+                weight.setGroupDesc(row.size() > 4 ? row.get(4).toString() : "");
+                weight.setGroupName(row.size() > 5 ? row.get(5).toString() : "");
+                weight.setGroupName2(row.size() > 6 ? row.get(6).toString() : "");
+                weight.setPlant(row.size() > 7 ? row.get(7).toString() : "");
+                weight.setLine(row.size() > 8 ? row.get(8).toString() : "");
+                weight.setWeight(row.size() > 9 ? row.get(9).toString() : "0");
+/*                weight.setTi(row.size() > 10 ? row.get(10).toString() : "0");
+                weight.setHi(row.size() > 11 ? row.get(11).toString() : "0");
+                weight.setUpc(row.size() > 12 ? row.get(12).toString() : "0");*/
+                weightList.add(weight);
+            }
+        }
+
+        System.out.println("Filtered List Size -> " + weightList.size());
+        return weightList;
+    }
+
+
+
+
+    /**
+     * Get Weight by Row Label( Item Code  )
+     * rowLabel = Item Code
+     *
+     */
+    public List<WeightWithUPC> getWeightByItemCode(String sheetName, String rowLabel) throws IOException {
+        System.out.println("Getting weight for sheet " + sheetName + " where RowLabel = " + rowLabel);
+        String range = sheetName + "!A1:M";
+        List<List<Object>> values = sheetsService.spreadsheets().values()
+                .get(spreadsheetId, range)
+                .execute()
+                .getValues();
+
+        if (values == null || values.size() <= 1) {
+            return Collections.emptyList();
+        }
+
+        values.remove(0); // skip header
+
+        List<WeightWithUPC> weightList = new ArrayList<>();
+
+        for (List<Object> row : values) {
+            if (row.size() > 0 && row.get(0).toString().equalsIgnoreCase(rowLabel)) {
+                WeightWithUPC weight = new WeightWithUPC();
                 weight.setRowLabel(row.get(0).toString());
                 weight.setItemDescription(row.size() > 1 ? row.get(1).toString() : "");
                 weight.setGsg(row.size() > 2 ? row.get(2).toString() : "");

@@ -51,7 +51,16 @@ public class WeightController {
                     result = weightService.getWeightByRowLabel(sheetName, rowLabel);
                     responseBody.setSuccess(true);
                     responseBody.setData(result);
-                } else {
+                }else if("getWeightByItemCode".equalsIgnoreCase(query)) {
+
+                    Map<String, Object> data = requestBean.getData();
+                    String rowLabel = (String) data.get("itemCode");
+
+                    result = weightService.getWeightByItemCode(sheetName, rowLabel);
+                    responseBody.setSuccess(true);
+                    responseBody.setData(result);
+
+                }else {
                     responseBody.setSuccess(false);
                     responseBody.setMessage("Invalid query!");
                 }

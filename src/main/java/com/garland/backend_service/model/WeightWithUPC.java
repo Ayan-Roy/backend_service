@@ -1,6 +1,6 @@
 package com.garland.backend_service.model;
 
-public class Weight {
+public class WeightWithUPC {
     private String rowLabel;
     private String itemDescription;
     private String gsg;
@@ -11,8 +11,11 @@ public class Weight {
     private String plant;
     private String line;
     private String weight;
+    private String ti;
+    private String hi;
+    private String upc;
 
-    public Weight() {
+    public WeightWithUPC() {
     }
 
     public String getRowLabel() {
@@ -95,4 +98,27 @@ public class Weight {
         this.weight = weight;
     }
 
+    public String getTi() {
+        return ti;
+    }
+
+    public void setTi(String ti) {
+        this.ti = ti;
+    }
+
+    public String getHi() {
+        return hi;
+    }
+
+    public void setHi(String hi) {
+        this.hi = hi;
+    }
+
+    public String getUpc() {
+        return upc;
+    }
+
+    public void setUpc(String upc) {
+        this.upc = upc;
+    }
 }
