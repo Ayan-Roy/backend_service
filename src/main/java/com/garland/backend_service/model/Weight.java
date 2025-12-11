@@ -11,6 +11,9 @@ public class Weight {
     private String plant;
     private String line;
     private String weight;
+    private String ti;
+    private String hi;
+    private String upc;
 
     public Weight() {
     }
@@ -93,5 +96,29 @@ public class Weight {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getTi() {
+        return ti;
+    }
+
+    public void setTi(String ti) {
+        this.ti = ti;
+    }
+
+    public String getHi() {
+        return hi;
+    }
+
+    public void setHi(String hi) {
+        this.hi = hi;
+    }
+
+    public String getUpc() {
+        return upc;
+    }
+
+    public void setUpc(String upc) {
+        this.upc = upc;
     }
 }

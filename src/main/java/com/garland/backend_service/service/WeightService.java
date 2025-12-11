@@ -57,6 +57,9 @@ public class WeightService {
             weight.setPlant(row.size() > 7 ? row.get(7).toString() : "");
             weight.setLine(row.size() > 8 ? row.get(8).toString() : "");
             weight.setWeight(row.size() > 9 ? row.get(9).toString() : "0");
+            weight.setTi(row.size() > 10 ? row.get(10).toString() : "0");
+            weight.setHi(row.size() > 11 ? row.get(11).toString() : "0");
+            weight.setUpc(row.size() > 12 ? row.get(12).toString() : "0");
 
             weightList.add(weight);
         }
@@ -100,6 +103,9 @@ public class WeightService {
                 weight.setPlant(row.size() > 7 ? row.get(7).toString() : "");
                 weight.setLine(row.size() > 8 ? row.get(8).toString() : "");
                 weight.setWeight(row.size() > 9 ? row.get(9).toString() : "0");
+                weight.setTi(row.size() > 10 ? row.get(10).toString() : "0");
+                weight.setHi(row.size() > 11 ? row.get(11).toString() : "0");
+                weight.setUpc(row.size() > 12 ? row.get(12).toString() : "0");
                 weightList.add(weight);
             }
         }
