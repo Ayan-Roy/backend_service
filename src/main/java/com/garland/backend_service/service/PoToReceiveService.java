@@ -26,7 +26,7 @@ public class PoToReceiveService {
     }
 
 
-    public List<PoToReceive> getPoToReceiveListByDate(String sheetName) throws IOException {
+    public List<PoToReceive> getPoToReceiveList(String sheetName) throws IOException {
         System.out.println("Getting ProductList for sheet " + sheetName);
         String range = sheetName + "!A1:P";
         List<List<Object>> values = sheetsService.spreadsheets().values()
@@ -45,6 +45,35 @@ public class PoToReceiveService {
 
         for (List<Object> row : values) {
             poToReceiveList.add(mapRowToProductBean(row));
+        }
+
+        System.out.println("List Size -> " + poToReceiveList.size());
+        return poToReceiveList;
+    }
+
+    public List<PoToReceive> getPoToReceiveListByDate(String sheetName, String date, String warehouse) throws IOException {
+        System.out.println("Getting ProductList for sheet " + sheetName);
+        String range = sheetName + "!A1:P";
+        List<List<Object>> values = sheetsService.spreadsheets().values()
+                .get(spreadsheetId, range)
+                .execute()
+                .getValues();
+
+        if (values == null || values.size() <= 1) {
+            return Collections.emptyList();
+        }
+
+        // skip header row
+        values.remove(0);
+
+        List<PoToReceive> poToReceiveList = new ArrayList<>();
+
+        for (List<Object> row : values) {
+            PoToReceive poToReceive = mapRowToProductBean(row);
+            if (poToReceive != null && poToReceive.getReceiveDate() != null && poToReceive.getReceiveDate().equals(date)
+                    && poToReceive.getWarehouse() != null && poToReceive.getWarehouse().equals(warehouse)) {
+                poToReceiveList.add(poToReceive);
+            }
         }
 
         System.out.println("List Size -> " + poToReceiveList.size());

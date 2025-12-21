@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PoToReceiveController {
@@ -44,16 +45,36 @@ public class PoToReceiveController {
                 responseBody.setSuccess(false);
                 responseBody.setMessage("Query is required");
             } else {
-
+                Object result = null;
                 if ("getPoToReceiveList".equalsIgnoreCase(query)) {
 
-                    Object result = poToReceiveService.getPoToReceiveListByDate(sheetName);
+                    result = poToReceiveService.getPoToReceiveList(sheetName);
                     if (result == null) {
                         responseBody.setSuccess(false);
                         responseBody.setMessage("No production register found");
                     } else {
                         responseBody.setSuccess(true);
                         responseBody.setData(result);
+                    }
+                } else if ("getPoToReceiveListByDate".equalsIgnoreCase(query)) {
+                    Map<String, Object> data = requestBean.getData();
+                    if (data != null) {
+                        String date = (String) data.get("date");
+                        String warehouse = (String) data.get("warehouse");
+                        if (date == null) {
+                            responseBody.setSuccess(false);
+                            responseBody.setMessage("Date is required");
+                        } else if (warehouse == null) {
+                            responseBody.setSuccess(false);
+                            responseBody.setMessage("Warehouse is required");
+                        } else {
+                            result = poToReceiveService.getPoToReceiveListByDate(sheetName, date, warehouse);
+                            responseBody.setSuccess(true);
+                            responseBody.setData(result);
+                        }
+                    } else {
+                        responseBody.setSuccess(false);
+                        responseBody.setMessage("Invalid Data!");
                     }
                 } else {
                     responseBody.setSuccess(false);
