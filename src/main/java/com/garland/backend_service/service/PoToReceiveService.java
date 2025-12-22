@@ -98,12 +98,13 @@ public class PoToReceiveService {
 
         poToReceive.setContainerTrackId(row.size() > 9 ? row.get(9).toString() : "");
         poToReceive.setWarehouse(row.size() > 10 ? row.get(10).toString() : "");
-        poToReceive.setQuantity(row.size() > 11 ? row.get(11).toString() : "");
-        poToReceive.setLot1(row.size() > 12 ? row.get(12).toString() : "");
-        poToReceive.setType(row.size() > 13 ? row.get(13).toString() : "");
-        poToReceive.setLot3(row.size() > 14 ? row.get(14).toString() : "");
-        poToReceive.setQuantity(row.size() > 15 ? row.get(15).toString() : "");
-        poToReceive.setWeight(row.size() > 16 ? row.get(16).toString() : "");
+        poToReceive.setLot1(row.size() > 11 ? row.get(11).toString() : "");
+        poToReceive.setType(row.size() > 12 ? row.get(12).toString() : "");
+        poToReceive.setLot3(row.size() > 13 ? row.get(13).toString() : "");
+        poToReceive.setQuantity(row.size() > 14 ? row.get(14).toString() : "");
+        poToReceive.setWeight(row.size() > 15 ? row.get(15).toString() : "");
+
+
         return poToReceive;
     }
 
