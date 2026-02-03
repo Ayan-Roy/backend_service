@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,7 +73,7 @@ public class PoToReceiveService {
 
         for (List<Object> row : values) {
             PoToReceive poToReceive = mapRowToProductBean(row);
-            if (poToReceive != null && poToReceive.getReceiveDate() != null && poToReceive.getReceiveDate().equals(date)
+            if (poToReceive != null && poToReceive.getReceiveDate() != null && (poToReceive.getReceiveDate().equals(date) || isSameDate(date, poToReceive.getReceiveDate()))
                     && poToReceive.getWarehouse() != null && poToReceive.getWarehouse().equals(warehouse)) {
                 poToReceiveList.add(poToReceive);
             }
@@ -79,6 +82,22 @@ public class PoToReceiveService {
         System.out.println("List Size -> " + poToReceiveList.size());
         return poToReceiveList;
     }
+
+    public static boolean isSameDate(String trustedDate, String inputDate) {
+        try {
+            LocalDate d1 = LocalDate.parse(trustedDate,
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+            LocalDate d2 = LocalDate.parse(inputDate,
+                    DateTimeFormatter.ofPattern("d/M/yyyy"));
+
+            return d1.equals(d2);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+
 
 
     private PoToReceive mapRowToProductBean(List<Object> row) {
